@@ -1,0 +1,3 @@
+Shortest path is: 
+0 1 2 
+total weight = 10
