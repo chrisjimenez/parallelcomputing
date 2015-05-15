@@ -1,29 +1,29 @@
-/////////////////////////////////////////////////////////////////////////
-//  Parallel Computing Assignment 1
-//  Chris Jimenez
-//  3/15/14
-//
-//  This program uses MPI to calcualte a set of unkowns(x_1...x_n)
-//  by using the Jacobi method! That is, using initial values of
-//  unknowns a set of new unkowns are calculated. The error
-//  between the two sets is calculated and if it meets under
-//  a given error threshold, then it is accepted! Otherwise,
-//  the calcualtion keeps repeating until it is met by replacing 
-//  the old set of unkowns iwth the new set of unkowns
-//  
-//  Functions used:
-//      check_matrix()
-//      get_input()
-//      check_error()
-//
-//  MPI functions used:
-//      MPI_Scatter
-//      MPI_Init
-//      MPI_Finalize
-//      MPI_Allgatherv
-//      MPI_Barrier
-//
-/////////////////////////////////////////////////////////////////////////
+/*************************************************************************
+*  Parallel Computing Assignment 1
+*  Chris Jimenez
+*  3/15/14
+*
+*  This program uses MPI to calcualte a set of unkowns(x_1...x_n)
+*  by using the Jacobi method! That is, using initial values of
+*  unknowns a set of new unkowns are calculated. The error
+*  between the two sets is calculated and if it meets under
+*  a given error threshold, then it is accepted! Otherwise,
+*  the calcualtion keeps repeating until it is met by replacing
+*  the old set of unkowns iwth the new set of unkowns
+*
+*  Functions used:
+*      check_matrix()
+*      get_input()
+*      check_error()
+*
+*  MPI functions used:
+*      MPI_Scatter
+*      MPI_Init
+*      MPI_Finalize
+*      MPI_Allgatherv
+*      MPI_Barrier
+*
+***************************************************************************/
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -47,10 +47,6 @@ int check_error();
 /********************************/
 
 
-/*****************************************************************/
-/* Function definitions: functions are ordered alphabetically ****/
-/*****************************************************************/
-
 /****************************************************************/
 /* Calcualtes error between to sets of unkowns, or in this */
 /* case X's */
@@ -68,7 +64,7 @@ int check_error( float *new_x, int num){
         }
     }
     return flag;//return false...
-}/************************************************************/
+}
 
 /*
  Conditions for convergence (diagonal dominance):
@@ -113,11 +109,12 @@ void check_matrix(){
         printf("The matrix will not converge\n");
         exit(1);
     }
-}/***********************************************************/
+}
 
 
-/************************************************************/
-/* Read input from file */
+/**
+*   Read input from file
+*/
 void get_input(char filename[]){
     FILE * fp;
     int i ,j;  //for the for loops
@@ -148,7 +145,6 @@ void get_input(char filename[]){
         exit(1);
     }
     
-    //x
     x = (float *) malloc(num * sizeof(float));
     
     //if x cannot be allocated, do the following...
@@ -157,7 +153,6 @@ void get_input(char filename[]){
         exit(1);
     }
     
-    //b
     b = (float *) malloc(num * sizeof(float));
     
     //if b cannot be allocated, do the following...
@@ -169,9 +164,7 @@ void get_input(char filename[]){
     //allocate space or daig_vec
     diag_vec = (float *) malloc(num * sizeof(float));
     
-    ///////////////////////////////////////////////////////////
-    /* Now .. Filling the blanks */ //////////////////////////
-    /* The initial values of Xs */
+    // The initial values of Xs
     
     for(i = 0; i < num; i++){
         fscanf(fp,"%f ", &x[i]);
@@ -193,11 +186,12 @@ void get_input(char filename[]){
     
     //close the file....
     fclose(fp);
-}/***********************************************************/
+}
 
 
-/************************************************************/
-//Main method...
+/**
+ *  MAIN
+ */
 int main(int argc, char *argv[]){
     int nit = 0;    /* number of iterations */
     int i, j, k;   //for for loops
@@ -353,4 +347,4 @@ int main(int argc, char *argv[]){
     MPI_Barrier(MPI_COMM_WORLD);
     MPI_Finalize(); 
     return 0;
-}/**********************************************************/
+}
